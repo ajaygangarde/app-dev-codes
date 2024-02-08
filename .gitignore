@@ -1,5 +1,4 @@
-.DS_Store
-**/.DS_Store
+
 frontend/.env
 backend/logs
 node_modules
