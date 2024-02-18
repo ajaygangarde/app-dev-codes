@@ -1,9 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { format } from 'date-fns';
 import draggablePoints from 'highcharts/modules/draggable-points';
+import CustomEvents from "highcharts-custom-events";
+import SeriesDailogForMinAndMaxYAxisWrapper from './SeriesDailogForMinAndMaxYAxisWrapper';
+import { useAppSelector } from '../../hooks/hooks';
+import capitalizeFirstLetter from '../../utils/firstLetterUpperCase';
+import { setInterfaceKeys } from './seriesPlotSlice';
+import { useDispatch } from 'react-redux';
 draggablePoints(Highcharts)
+CustomEvents(Highcharts);
+
 
 interface dataItems {
   timestamp: number,
@@ -14,22 +22,30 @@ interface ISeriesProps {
   data: dataItems[]
 }
 
+
+interface IseriesData {
+  x: number,
+  y: number,
+  name: string
+}
+
 const DB_COLUMN_KEYS = [{
   name: 'Photon',
   key: 'photon'
 }, {
-  name: 'voltage',
+  name: 'Voltage',
   key: 'voltage'
 }, {
-  name: 'sulphur',
+  name: 'Sulphur',
   key: 'sulphur'
 }]
+
 
 
 const seriesKeyValueDataLogic = (data: dataItems[]) => {
   let keyValuePairs = [] as any
   DB_COLUMN_KEYS.forEach((item, index) => {
-    keyValuePairs[item.key] = Array()
+    keyValuePairs[item.key] = []
   })
   Object.keys(keyValuePairs).forEach((keys, index) => {
     for (let i = 0; i < keyValuePairs[keys].length; i++) {
@@ -37,7 +53,7 @@ const seriesKeyValueDataLogic = (data: dataItems[]) => {
     }
   })
 
-  data.map((dataItems: dataItems, dataIndex) => {
+  data.forEach((dataItems: dataItems, dataIndex) => {
     DB_COLUMN_KEYS.forEach((dbKeys, dbIndex) => {
       keyValuePairs[dbKeys.key].push({
         x: dataItems.timestamp * 1000,
@@ -50,14 +66,32 @@ const seriesKeyValueDataLogic = (data: dataItems[]) => {
 }
 
 
-const getOptions = (seriesData: any) => {
+const getOptions = (seriesData: IseriesData[],
+  pickPoints: IseriesData[], setPickPoints: ([]) => void,
+  executeCallbackYAxisScaleMethos: (type: string) => void,
+  openYAxisScaleDailog: () => void,
+  minAndMaxYAxis: any) => {
   const options = {
+    chart: {
+      events: {
+        load: function () {
+          var ch = this as any
+          var x = 20;
+          var y = 57;
+
+          ch.flashText = ch.renderer.text('<div id="report"></div>', x, y + 10, true).attr({
+            zIndex: 101,
+            translateY: 100
+          }).add();
+        }
+      }
+    },
     title: {
-      text: 'test Plot',
+      text: 'Series Plot',
     },
     xAxis: {
       title: {
-        text: 'Date tst',
+        text: 'Date',
       },
       type: "datetime",
       labels: {
@@ -69,6 +103,23 @@ const getOptions = (seriesData: any) => {
     yAxis: [],
     series: [],
     plotOptions: {
+      series: {
+        point: {
+          events: {
+            click(e: any) {
+              if (e && e?.point) {
+                const mergePoints = [...pickPoints, {
+                  name: `Point ${pickPoints.length + 1}`,
+                  x: e.point.x,
+                  y: e.point.y,
+                }]
+                setPickPoints(mergePoints)
+              }
+            }
+
+          }
+        }
+      },
       scatter: {
         dataLabels: {
           enabled: true,
@@ -85,14 +136,28 @@ const getOptions = (seriesData: any) => {
   Object.keys(seriesData).forEach((keyName, index) => {
     options.yAxis.push({
       title: {
-        text: keyName
-      }
+        text: keyName,
+        events: {
+          mouseover: function () {
+            executeCallbackYAxisScaleMethos("mouseOver");
+          },
+          mouseout: function () {
+            executeCallbackYAxisScaleMethos("mouseOut");
+          },
+          click: function () {
+            openYAxisScaleDailog();
+          }
+        }
+      },
+      min: minAndMaxYAxis[`min${capitalizeFirstLetter(keyName)}`] || null,
+      max: minAndMaxYAxis[`max${capitalizeFirstLetter(keyName)}`] || null
     })
 
     options.series.push({
       yAxis: index,
       name: keyName,
-      data: seriesData[keyName]
+      data: seriesData[keyName as any],
+      visible: (keyName === 'photon') ? true : false
     })
   })
 
@@ -100,23 +165,13 @@ const getOptions = (seriesData: any) => {
     name: 'Scatter Plot',
     color: 'red',
     yAxis: 0,
-    data: [
-      {
-        name: "Point 1",
-        "x": 1706725800 * 1000,
-        "y": 50000.67377897927,
-      },
-    ],
+    data: pickPoints,
     type: 'scatter',
     dragDrop: {
       draggableY: true, // Enable Y-axis dragging
       draggableX: true, // Enable X-axis dragging
     },
-    cursor: 'move', // Cursor style when dragging
-    // dragMinY: 0, // Minimum Y-axis value allowed during dragging
-    // dragMaxY: 10, // Maximum Y-axis value allowed during dragging
-    // dragMinX: 0, // Minimum X-axis value allowed during dragging
-    // dragMaxX: 10, // Maximum X-axis value allowed during dragging,  
+    cursor: 'move', // Cursor style when dragging 
     visible: true,
     marker: {
       symbol: 'circle',
@@ -127,15 +182,66 @@ const getOptions = (seriesData: any) => {
 }
 
 const SeriesPlot = (props: ISeriesProps) => {
-console.log("TESTING APP")
+  const [pickPoints, setPickPoints] = useState([
+    {
+      name: "Point 1",
+      "x": 1706725800 * 1000,
+      "y": 50000.67377897927,
+    },
+  ])
+  const dispatch = useDispatch();
+
+  const seriesInputControls = useAppSelector((state) => state.seriesPlot.seriesInputControls);
+
+
+
+  const chartRef = useRef(null) as any
+
+  const openYAxisScaleDailog = useCallback(() => {
+    dispatch(setInterfaceKeys({ name: 'isOpenYAxisDailog', value: true }));
+  }, [dispatch])
+
+  const executeCallbackYAxisScaleMethos = useCallback((eventType: string) => {
+    // // Create the button element
+    const doc = document as any
+    const reportElement = doc.getElementById('report')
+    const customTooltipButton = document.createElement('button');
+    if (eventType === 'mouseOver') {
+      customTooltipButton.textContent = 'Click to Scale Y Axis';
+      customTooltipButton.value = "Click to Scale Y Axis"
+      customTooltipButton.style.position = 'absolute';
+      customTooltipButton.style.top = '20px';
+      customTooltipButton.style.left = '10px';
+      customTooltipButton.style.padding = '10px 15px';
+      customTooltipButton.style.backgroundColor = '#007bff';
+      customTooltipButton.style.color = '#fff';
+      customTooltipButton.style.border = 'none';
+      customTooltipButton.style.borderRadius = '5px';
+      customTooltipButton.style.cursor = 'pointer';
+      customTooltipButton.style.fontFamily = 'Arial, sans-serif';
+      customTooltipButton.style.fontSize = '14px';
+      reportElement && doc.getElementById('report').appendChild(customTooltipButton);
+    } else {
+      var olddata = reportElement.lastChild;
+      reportElement.removeChild(olddata);
+    }
+
+
+
+  }, [])
+
   const options = useMemo(() => {
-    return getOptions(seriesKeyValueDataLogic(props.data))
-  }, [props.data])
+    return getOptions(seriesKeyValueDataLogic(props.data), pickPoints,
+      setPickPoints, executeCallbackYAxisScaleMethos, openYAxisScaleDailog, seriesInputControls)
+  }, [props.data, pickPoints, seriesInputControls, openYAxisScaleDailog, executeCallbackYAxisScaleMethos])
+
+
 
 
   return (
     <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <SeriesDailogForMinAndMaxYAxisWrapper />
+      <HighchartsReact highcharts={Highcharts} options={options} ref={chartRef} />
     </div>
   );
 };
