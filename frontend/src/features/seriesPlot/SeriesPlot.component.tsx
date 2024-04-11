@@ -11,7 +11,6 @@ import { setInterfaceKeys } from './seriesPlotSlice';
 import { useDispatch } from 'react-redux';
 draggablePoints(Highcharts)
 CustomEvents(Highcharts);
-// import MulticolorSeries from '../../plugins/highcharts-multicolor-series/js/multicolor_series';
 
 interface dataItems {
   timestamp: number,

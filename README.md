@@ -28,6 +28,10 @@
  ### End to End test with Cypress - Creating workflow to test Cypress EndtoENd Tests.
   - Comming Soon.
   
+
+
+
+  "highcharts-custom-events": "file:./custom_events",
   
 
   
