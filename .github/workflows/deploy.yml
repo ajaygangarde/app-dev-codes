@@ -21,10 +21,11 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build frontend Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend-app:latest ./frontend
+      run: docker build -t frontend:1.0.0 ./frontend -f ./frontend/Dockerfile.prod
+      working-directory: ${{ github.workspace }}
       
     - name: Push frontend Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/frontend-app:latest
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0
 
   build_backend:
     runs-on: ubuntu-latest
@@ -40,10 +41,11 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build backend Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/backend-app:latest ./backend
+      run: docker build -t backend:1.0.0 ./backend -f ./backend/Dockerfile.prod
+      working-directory: ${{ github.workspace }}
       
     - name: Push backend Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/backend-app:latest
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +55,4 @@ jobs:
     steps:
     - name: Deploy to server
       run: |
-        ssh ubuntu@ip-172-26-15-22 'docker pull ${{ secrets.DOCKER_USERNAME }}/frontend-app:latest && docker pull ${{ secrets.DOCKER_USERNAME }}/backend-app:latest && docker-compose -f /../../docker-compose-prod.yml up -d'
+        ssh ubuntu@ip-172-26-15-22 'docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 && docker-compose -f /../../docker-compose-prod.yml up -d'
