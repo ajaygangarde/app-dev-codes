@@ -48,11 +48,20 @@ jobs:
       run: docker push backend:1.0.0
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     needs: [build_frontend, build_backend]
-    
     steps:
-    - name: Deploy to server
-      run: |
-        ssh ubuntu@ip-172-26-15-22 'docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 && docker-compose -f /../../docker-compose-prod.yml up -d'
+    - name: Deply to Server and Pull Docker image
+      run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
+    - name: Delete Old Front End container
+      run: sudo docker rm -f frontend-container || true
+    - name: Delete Old backend End container
+      run: sudo docker rm -f backend-container || true
+    - name: Run Docker Container
+      run: sudo docker-compose -f /../../docker-compose-prod.yml up -d
+
+    # steps:
+    # - name: Deploy to server
+    #   run: |
+    #     ssh ubuntu@ip-172-26-15-22 'docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 && docker-compose -f /../../docker-compose-prod.yml up -d'
