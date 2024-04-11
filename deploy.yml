@@ -55,4 +55,4 @@ jobs:
     steps:
     - name: Deploy to server
       run: |
-        ssh ubuntu@ip-172-26-15-22 'docker pull frontend:1.0.0 && docker pull backend:1.0.0 && docker-compose -f /../../docker-compose-prod.yml up -d'
+        ssh ubuntu@ip-172-26-15-22 'docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 && docker-compose -f /../../docker-compose-prod.yml up -d'
