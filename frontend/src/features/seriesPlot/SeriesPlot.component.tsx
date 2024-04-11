@@ -205,28 +205,28 @@ const SeriesPlot = (props: ISeriesProps) => {
 
   const executeCallbackYAxisScaleMethos = useCallback((eventType: string) => {
     // // Create the button element
-    const doc = document as any
-    const reportElement = doc.getElementById('report')
-    const customTooltipButton = document.createElement('button');
-    if (eventType === 'mouseOver') {
-      customTooltipButton.textContent = 'Click to Scale Y Axis';
-      customTooltipButton.value = "Click to Scale Y Axis"
-      customTooltipButton.style.position = 'absolute';
-      customTooltipButton.style.top = '20px';
-      customTooltipButton.style.left = '10px';
-      customTooltipButton.style.padding = '10px 15px';
-      customTooltipButton.style.backgroundColor = '#007bff';
-      customTooltipButton.style.color = '#fff';
-      customTooltipButton.style.border = 'none';
-      customTooltipButton.style.borderRadius = '5px';
-      customTooltipButton.style.cursor = 'pointer';
-      customTooltipButton.style.fontFamily = 'Arial, sans-serif';
-      customTooltipButton.style.fontSize = '14px';
-      reportElement && doc.getElementById('report').appendChild(customTooltipButton);
-    } else {
-      var olddata = reportElement.lastChild;
-      reportElement.removeChild(olddata);
-    }
+    // const doc = document as any
+    // const reportElement = doc.getElementById('report')
+    // const customTooltipButton = document.createElement('button');
+    // if (eventType === 'mouseOver') {
+    //   customTooltipButton.textContent = 'Click to Scale Y Axis';
+    //   customTooltipButton.value = "Click to Scale Y Axis"
+    //   customTooltipButton.style.position = 'absolute';
+    //   customTooltipButton.style.top = '20px';
+    //   customTooltipButton.style.left = '10px';
+    //   customTooltipButton.style.padding = '10px 15px';
+    //   customTooltipButton.style.backgroundColor = '#007bff';
+    //   customTooltipButton.style.color = '#fff';
+    //   customTooltipButton.style.border = 'none';
+    //   customTooltipButton.style.borderRadius = '5px';
+    //   customTooltipButton.style.cursor = 'pointer';
+    //   customTooltipButton.style.fontFamily = 'Arial, sans-serif';
+    //   customTooltipButton.style.fontSize = '14px';
+    //   reportElement && doc.getElementById('report').appendChild(customTooltipButton);
+    // } else {
+    //   var olddata = reportElement.lastChild;
+    //   reportElement.removeChild(olddata);
+    // }
 
 
 
