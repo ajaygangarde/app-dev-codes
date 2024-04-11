@@ -56,9 +56,9 @@ jobs:
     - name: Deply to Server and Pull Docker image
       run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
     - name: Delete Old Front End container
-      run: sudo docker rm -f frontend-container || true
+      run: sudo docker rm -f build_frontend || true
     - name: Delete Old backend End container
-      run: sudo docker rm -f backend-container || true
+      run: sudo docker rm -f build_backend || true
     - name: Run Docker Container
       run: sudo docker-compose -f /../../docker-compose-prod.yml up -d
 
