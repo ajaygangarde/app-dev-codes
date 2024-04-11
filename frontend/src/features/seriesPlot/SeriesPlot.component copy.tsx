@@ -3,12 +3,14 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { format } from 'date-fns';
 import draggablePoints from 'highcharts/modules/draggable-points';
+import CustomEvents from "highcharts-custom-events";
 import SeriesDailogForMinAndMaxYAxisWrapper from './SeriesDailogForMinAndMaxYAxisWrapper';
 import { useAppSelector } from '../../hooks/hooks';
 import capitalizeFirstLetter from '../../utils/firstLetterUpperCase';
 import { setInterfaceKeys } from './seriesPlotSlice';
 import { useDispatch } from 'react-redux';
 draggablePoints(Highcharts)
+CustomEvents(Highcharts);
 // import MulticolorSeries from '../../plugins/highcharts-multicolor-series/js/multicolor_series';
 
 interface dataItems {
@@ -147,13 +149,24 @@ const getOptions = (seriesData: IseriesData[],
 
 
   Object.keys(seriesData).forEach((keyName, index) => {
-    // options.yAxis.push({
-    //   title: {
-    //     text: keyName,
-    //   },
-    //   min: minAndMaxYAxis[`min${capitalizeFirstLetter(keyName)}`] || null,
-    //   max: minAndMaxYAxis[`max${capitalizeFirstLetter(keyName)}`] || null
-    // })
+    options.yAxis.push({
+      title: {
+        text: keyName,
+        events: {
+          mouseover: function () {
+            executeCallbackYAxisScaleMethos("mouseOver");
+          },
+          mouseout: function () {
+            executeCallbackYAxisScaleMethos("mouseOut");
+          },
+          click: function () {
+            openYAxisScaleDailog();
+          }
+        }
+      },
+      min: minAndMaxYAxis[`min${capitalizeFirstLetter(keyName)}`] || null,
+      max: minAndMaxYAxis[`max${capitalizeFirstLetter(keyName)}`] || null
+    })
 
     options.series.push({
       yAxis: index,
