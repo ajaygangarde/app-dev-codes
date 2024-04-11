@@ -1,6 +1,6 @@
 ## Lists of Feature
   ### Project Structure
-      frontend - React js + Typescript + Redux Tookit 
+      frontend - React js + Typescript + Redux Tookit
       backend -  Express js + AWS S2 + AWS SES
   ### Series Highchart Plot - features/seriesPlot
    a. Pick Points - show Bullet Points with labels

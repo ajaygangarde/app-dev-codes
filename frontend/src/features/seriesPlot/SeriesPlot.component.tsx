@@ -11,7 +11,7 @@ import { setInterfaceKeys } from './seriesPlotSlice';
 import { useDispatch } from 'react-redux';
 draggablePoints(Highcharts)
 CustomEvents(Highcharts);
-
+// import MulticolorSeries from '../../plugins/highcharts-multicolor-series/js/multicolor_series';
 
 interface dataItems {
   timestamp: number,
@@ -58,7 +58,8 @@ const seriesKeyValueDataLogic = (data: dataItems[]) => {
       keyValuePairs[dbKeys.key].push({
         x: dataItems.timestamp * 1000,
         y: dataItems[dbKeys.key],
-        name: dbKeys.name
+        name: dbKeys.name,
+
       })
     })
   })
@@ -87,7 +88,7 @@ const getOptions = (seriesData: IseriesData[],
       }
     },
     title: {
-      text: 'Series Plot',
+      text: 'Series Plots',
     },
     xAxis: {
       title: {
@@ -98,7 +99,21 @@ const getOptions = (seriesData: IseriesData[],
         formatter(this: { value: number }) {
           return format(this.value, 'yyyy-MM-dd HH:mm:ss');
         },
-      }
+      },
+      plotLines: [{
+        color: '#FF0000',
+        width: 2,
+        value: 1708165800000,
+        zIndex: 5,
+        label: {
+          text: 'Vertical Line', // Text to display above the plot line
+          align: 'center', // Alignment of the label relative to the plot line
+          style: {
+            color: 'black', // Text color
+            fontWeight: 'bold' // Text weight
+          }
+        }
+      }]
     },
     yAxis: [],
     series: [],
@@ -231,13 +246,14 @@ const SeriesPlot = (props: ISeriesProps) => {
   }, [])
 
   const options = useMemo(() => {
+
     return getOptions(seriesKeyValueDataLogic(props.data), pickPoints,
       setPickPoints, executeCallbackYAxisScaleMethos, openYAxisScaleDailog, seriesInputControls)
   }, [props.data, pickPoints, seriesInputControls, openYAxisScaleDailog, executeCallbackYAxisScaleMethos])
 
 
 
-
+  console.log("==============", options)
   return (
     <div>
       <SeriesDailogForMinAndMaxYAxisWrapper />

@@ -5,11 +5,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app: Application = express();
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 8000;
+
+app.get('/api', (req: Request, res: Response) => {
+  res.send('API ROUTE CALLED');
+});
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server testing');
-});
+    res.send('Without API ROUTE CALLED');
+  });
+
 
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);

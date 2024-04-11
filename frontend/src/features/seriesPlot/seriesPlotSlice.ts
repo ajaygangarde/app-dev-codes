@@ -26,9 +26,6 @@ const initialState: SeriesState = {
     seriesInputControls: seriesInputControlsModel,
     isOpenYAxisDailog: false
 }
-// interface genericInteractiveFields {
-//     name: string, value: any
-// }
 
 
 export const seriesPlotSlice = createSlice({

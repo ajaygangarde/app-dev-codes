@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  nginx:
+    depends_on:
+      - backend
+      # - frontend
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    tty: true
+    networks:
+        - appcode-net
+    ports:
+      - "3050:80"
+  backend:
+    image: backend:1.0.0
+    container_name: backend
+    working_dir: /app
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    networks:
+      - appcode-net
+    volumes:
+      - ./backend:/app
+      - ./backend/nodemon.json:/app/nodemon.json
+      - /app/node_modules
+    tty: true
+    env_file:
+      - ./backend/.env
+    stdin_open: true
+    command: npm run dev-exec
+    
+  # frontend:
+  #   image: frontend:1.0.0
+  #   container_name: frontend
+  #   working_dir: /app
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile.dev
+  #   networks:
+  #       - appcode-net
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   tty: true
+  #   env_file:
+  #     - ./frontend/.env
+  #   stdin_open: true
+  #   ports: 
+  #     - "3000:3000"
+  #   command: npm run start:watch
+networks:
+    appcode-net:
+        driver: bridge

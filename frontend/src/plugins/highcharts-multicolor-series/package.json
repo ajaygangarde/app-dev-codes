@@ -1,0 +1,66 @@
+{
+  "_from": "highcharts-multicolor-series",
+  "_id": "highcharts-multicolor-series@2.4.1",
+  "_inBundle": false,
+  "_integrity": "sha512-swGZRcLSfchI+jrOerfZHnZ+Oa2+N6j158eCmKvPLhuQOp65rfNWV/GUtG3/eIvtF822gPmxmRYp9MpzDON0yQ==",
+  "_location": "/highcharts-multicolor-series",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "highcharts-multicolor-series",
+    "name": "highcharts-multicolor-series",
+    "escapedName": "highcharts-multicolor-series",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/highcharts-multicolor-series/-/highcharts-multicolor-series-2.4.1.tgz",
+  "_shasum": "4f3685115c24ad63603f6aaf03ceb3b1b9cf2bba",
+  "_spec": "highcharts-multicolor-series",
+  "_where": "C:\\Users\\user\\dev\\app-dev-codes\\frontend",
+  "author": {
+    "name": "Black Label",
+    "email": "start@blacklabel.pl",
+    "url": "http://blacklabel.pl"
+  },
+  "bugs": {
+    "url": "https://github.com/blacklabel/multicolor_series/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Highcharts plugin that adds new series: multicolor-series, where you can define color for each part of a path, between two points.",
+  "devDependencies": {
+    "google-closure-compiler": "^20160517.1.0",
+    "gulp": "^4.0.0",
+    "gulp-bump": "^2.1.0",
+    "gulp-eslint": "^2.0.0",
+    "gulp-git": "^2.10.0",
+    "gulp-if": "^2.0.0",
+    "gulp-sourcemaps": "1.6.0",
+    "yargs": "^4.7.0"
+  },
+  "files": [
+    "js/multicolor_series.js",
+    "js/multicolor_series.min.js",
+    "js/multicolor_series.min.js.map"
+  ],
+  "homepage": "https://github.com/blacklabel/multicolor_series#readme",
+  "keywords": [
+    "highcharts",
+    "multicolor",
+    "highcharts-addon"
+  ],
+  "license": "SEE LICENSE IN license.txt",
+  "main": "js/multicolor_series.js",
+  "name": "highcharts-multicolor-series",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blacklabel/multicolor_series.git"
+  },
+  "version": "2.4.1"
+}

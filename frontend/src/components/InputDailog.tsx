@@ -31,8 +31,8 @@ export default function InputDailog(props: Iprops) {
         handleClose,
         saveForm,
         children } = props
-
-
+                   
+   
     return (
         <React.Fragment>
 
