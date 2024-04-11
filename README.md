@@ -29,11 +29,16 @@
   - Comming Soon.
   
 
+How to setup Github Action with AWS
 
-
-  "highcharts-custom-events": "file:./custom_events",
+1. Setup Runner on AWS instance 
+2. Install Docker instance
+3. Install Docker compose on instance
+ `sudo curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)"  -o /usr/local/bin/docker-compose
+sudo mv /usr/local/bin/docker-compose /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose`
   
-
+before running this cmd always check latest version here:- https://github.com/docker/compose/releases
   
 
 

@@ -56,7 +56,7 @@ jobs:
     - name: Deply to Server and Pull Docker image
       run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
     - name: Run Docker Container
-      run: sudo docker-compose -f /../../docker-compose-prod.yml up -d
+      run: sudo docker-compose -f ../../docker-compose-prod.yml up -d
 
     # - name: Deploy to server
     #   run: |
