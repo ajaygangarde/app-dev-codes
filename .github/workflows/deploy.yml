@@ -7,7 +7,7 @@ on:
     # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 jobs:
-build_frontend:
+  build_frontend:
     runs-on: ubuntu-latest
     
     steps:
@@ -27,7 +27,7 @@ build_frontend:
     - name: Push frontend Docker image to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0
 
-build_backend:
+  build_backend:
     runs-on: ubuntu-latest
     
     steps:
