@@ -31,6 +31,8 @@
 
 How to setup Github Action with AWS
 
+Ref- https://www.youtube.com/watch?v=-nT1Xs7-qqA&ab_channel=TheTechTeam
+
 1. Setup Runner on AWS instance 
 2. Install Docker instance
 3. Install Docker compose on instance
@@ -39,6 +41,21 @@ sudo mv /usr/local/bin/docker-compose /usr/bin/docker-compose
 sudo chmod +x /usr/bin/docker-compose`
   
 before running this cmd always check latest version here:- https://github.com/docker/compose/releases
+
+To Run the build you have to running
+
+`cd action-runner`
+`./run.sh`
+
+To give the permission to above folder `action-runner` to run first time
+
+- sudo -i // go to root of linux instance
+- sudo groupadd docker
+- sudo usermod -aG docker ubuntu
+- sudo su - ubuntu // got back to ubuntu user
+
+
+
   
 
 
