@@ -46,7 +46,7 @@ jobs:
       
     - name: Push backend Docker image to Docker Hub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
-Deploy:
+  Deploy:
     runs-on: self-hosted 
     needs: [build_frontend, build_backend] 
     steps: 
