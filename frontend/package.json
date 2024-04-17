@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.24.1",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.9",
@@ -55,7 +56,6 @@
     ]
   },
   "devDependencies": {
-    "react-script": "^2.0.5",
-    "@babel/plugin-proposal-private-property-in-object":"7.24.1"
+    "react-script": "^2.0.5"
   }
 }
