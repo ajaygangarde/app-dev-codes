@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 # Build TypeScript files
-RUN CI=false npm run build
+RUN CI="" npm run build
 
 # Use a smaller image for the production build
 FROM node:14-alpine
