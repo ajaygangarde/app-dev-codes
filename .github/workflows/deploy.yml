@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
@@ -21,12 +21,10 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build frontend Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 ./frontend -f ./frontend/Dockerfile.prod
-      working-directory: ${{ github.workspace }}
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 ./frontend -f ./frontend/Dockerfile.prod
+        docker push ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0
       
-    - name: Push frontend Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0
-
   build_backend:
     runs-on: ubuntu-latest
     
@@ -41,17 +39,22 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build backend Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 ./backend -f ./backend/Dockerfile.prod
-      working-directory: ${{ github.workspace }}
-      
-    - name: Push backend Docker image to Docker Hub
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
-  Deploy:
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 ./backend -f ./backend/Dockerfile.prod
+        docker push ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
+
+  deploy:
     runs-on: self-hosted 
     needs: [build_frontend, build_backend] 
     steps: 
-      - uses: actions/checkout@main
+      - name: Checkout code
+        uses: actions/checkout@main
+      
       - name: Pull the Images
-        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 && sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 
+        run: |
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0 
+      
       - name: Run build 
-        run: docker-compose -f docker-compose-prod.yml up -d
+        run: |
+          docker-compose -f docker-compose-prod.yml up -d
