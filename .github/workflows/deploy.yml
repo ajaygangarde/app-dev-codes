@@ -50,9 +50,9 @@ jobs:
     steps: 
       - name: Checkout code
         uses: actions/checkout@main
-      - set Env
+      - name: set Env
         env:
-        CI: ""
+         CI: false
       
       - name: Pull the Images
         run: |
