@@ -1,15 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { format } from 'date-fns';
 import draggablePoints from 'highcharts/modules/draggable-points';
 import SeriesDailogForMinAndMaxYAxisWrapper from './SeriesDailogForMinAndMaxYAxisWrapper';
-import { useAppSelector } from '../../hooks/hooks';
-import capitalizeFirstLetter from '../../utils/firstLetterUpperCase';
-import { setInterfaceKeys } from './seriesPlotSlice';
-import { useDispatch } from 'react-redux';
 draggablePoints(Highcharts)
-// import MulticolorSeries from '../../plugins/highcharts-multicolor-series/js/multicolor_series';
 
 interface dataItems {
   timestamp: number,
@@ -64,12 +59,8 @@ const seriesKeyValueDataLogic = (data: dataItems[]) => {
   return keyValuePairs
 }
 
-
-const getOptions = (seriesData: IseriesData[],
-  pickPoints: IseriesData[], setPickPoints: ([]) => void,
-  executeCallbackYAxisScaleMethos: (type: string) => void,
-  openYAxisScaleDailog: () => void,
-  minAndMaxYAxis: any) => {
+ // eslint-disable-next-line
+const getOptions = (seriesData: IseriesData[], pickPoints: IseriesData[], setPickPoints: ([]) => void): {} => {
   const options = {
     chart: {
       events: {
@@ -191,56 +182,20 @@ const SeriesPlot = (props: ISeriesProps) => {
       "y": 50000.67377897927,
     },
   ])
-  const dispatch = useDispatch();
 
-  const seriesInputControls = useAppSelector((state) => state.seriesPlot.seriesInputControls);
 
 
 
   const chartRef = useRef(null) as any
 
-  const openYAxisScaleDailog = useCallback(() => {
-    dispatch(setInterfaceKeys({ name: 'isOpenYAxisDailog', value: true }));
-  }, [dispatch])
-
-  const executeCallbackYAxisScaleMethos = useCallback((eventType: string) => {
-    // // Create the button element
-    // const doc = document as any
-    // const reportElement = doc.getElementById('report')
-    // const customTooltipButton = document.createElement('button');
-    // if (eventType === 'mouseOver') {
-    //   customTooltipButton.textContent = 'Click to Scale Y Axis';
-    //   customTooltipButton.value = "Click to Scale Y Axis"
-    //   customTooltipButton.style.position = 'absolute';
-    //   customTooltipButton.style.top = '20px';
-    //   customTooltipButton.style.left = '10px';
-    //   customTooltipButton.style.padding = '10px 15px';
-    //   customTooltipButton.style.backgroundColor = '#007bff';
-    //   customTooltipButton.style.color = '#fff';
-    //   customTooltipButton.style.border = 'none';
-    //   customTooltipButton.style.borderRadius = '5px';
-    //   customTooltipButton.style.cursor = 'pointer';
-    //   customTooltipButton.style.fontFamily = 'Arial, sans-serif';
-    //   customTooltipButton.style.fontSize = '14px';
-    //   reportElement && doc.getElementById('report').appendChild(customTooltipButton);
-    // } else {
-    //   var olddata = reportElement.lastChild;
-    //   reportElement.removeChild(olddata);
-    // }
-
-
-
-  }, [])
-
   const options = useMemo(() => {
 
     return getOptions(seriesKeyValueDataLogic(props.data), pickPoints,
-      setPickPoints, executeCallbackYAxisScaleMethos, openYAxisScaleDailog, seriesInputControls)
-  }, [props.data, pickPoints, seriesInputControls, openYAxisScaleDailog, executeCallbackYAxisScaleMethos])
+      setPickPoints)
+  }, [props.data, pickPoints, setPickPoints])
 
 
 
-  console.log("==============", options)
   return (
     <div>
       <SeriesDailogForMinAndMaxYAxisWrapper />

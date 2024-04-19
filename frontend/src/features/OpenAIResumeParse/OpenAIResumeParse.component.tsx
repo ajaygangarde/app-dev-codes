@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Button, Input } from '@mui/material';
+import React from 'react';
 import FileUpload from '../../components/FileUpload';
 
 export const OpenAIResumeParse = () => {

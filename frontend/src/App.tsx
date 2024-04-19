@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import SeriesPlot from './features/seriesPlot/SeriesPlot.component';
 import { seriesDataJson } from './mocks/SeriesDataJson';
