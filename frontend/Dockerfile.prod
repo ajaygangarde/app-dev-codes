@@ -1,5 +1,5 @@
 # Use a specific Node.js version
-FROM node:20.11.1-slim as build
+FROM node:19.5.0-alpine as build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -8,9 +8,11 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install npm dependencies and update npm
-RUN npm \
+RUN apk add --update --no-cache \
+    npm \
   && npm install -g npm@6.14.15 \
-  && npm install
+  && npm install \
+  && rm -rf /var/cache/apk/*
 
 # Copy the entire application code to the container
 COPY . .
