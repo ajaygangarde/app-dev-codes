@@ -8,11 +8,9 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install npm dependencies and update npm
-RUN apk add --update --no-cache \
-    npm \
+RUN npm \
   && npm install -g npm@6.14.15 \
-  && npm install \
-  && rm -rf /var/cache/apk/*
+  && npm install
 
 # Copy the entire application code to the container
 COPY . .
