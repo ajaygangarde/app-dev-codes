@@ -18,8 +18,8 @@ RUN apk add --update --no-cache \
 COPY . .
 
 # Build the React app for production
-ENV CI=''
-RUN npm run build
+# RUN ENV CI=''
+RUN CI= npm run build
 
 # Use Nginx as the production server
 FROM nginx:alpine
