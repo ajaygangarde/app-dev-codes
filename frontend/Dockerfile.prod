@@ -1,5 +1,5 @@
 # Use a specific Node.js version
-FROM node:14-alpine as build
+FROM node:20.11.1-slim as build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -19,6 +19,7 @@ COPY . .
 
 # Build the React app for production
 # RUN ENV CI=''
+RUN npm install --save-dev @babel/plugin-proposal-private-property-in-object --legacy-peer-deps
 RUN CI= npm run build
 
 # Use Nginx as the production server
